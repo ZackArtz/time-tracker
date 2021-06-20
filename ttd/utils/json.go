@@ -1,21 +1,16 @@
 package utils
 
 import (
-	"net/http"
-
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 )
 
-func JSON(ctx *fiber.Ctx, statusCode int, data interface{}) {
+func JSON(ctx *fiber.Ctx, statusCode int, data interface{}) error {
 	ctx.Status(statusCode)
-	err := ctx.JSON(data)
-	if err != nil {
-		Error(ctx, http.StatusUnprocessableEntity, err)
-	}
+	return ctx.JSON(data)
 }
 
-func Error(ctx *fiber.Ctx, statusCode int, err error) {
-	JSON(ctx, statusCode, struct {
+func Error(ctx *fiber.Ctx, statusCode int, err error) error {
+	return JSON(ctx, statusCode, struct {
 		Error string `json:"error"`
 	}{
 		Error: err.Error(),

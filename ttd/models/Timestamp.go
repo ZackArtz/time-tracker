@@ -1,81 +1,26 @@
+
+/*
+Copyright © 2020 Zachary Myers <zackmyers@lavabit.com>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 package models
 
-import (
-	"errors"
-	"html"
-	"strings"
-	"time"
-
-	"github.com/google/uuid"
-	"github.com/jinzhu/gorm"
-)
+import "time"
 
 type Timestamp struct {
-	*gorm.Model
-	UUID      string    `json:"uuid"`
-	StartTime time.Time `json:"start_time"`
-	EndTime   time.Time `json:"end_time"`
+	UUID      string    `json:"uuid,omitempty"`
+	StartTime time.Time `json:"start_time,omitempty"`
+	EndTime   time.Time `json:"end_time,omitempty"`
 	Comment   string    `json:"comment"`
 	Project   string    `json:"project"`
 	Category  string    `json:"category"`
-}
-
-func (t *Timestamp) Prepare() Timestamp {
-	guid := uuid.New()
-	t.ID = 0
-	t.Comment = html.EscapeString(strings.TrimSpace(t.Comment))
-	t.Project = html.EscapeString(strings.TrimSpace(t.Project))
-	t.UUID = guid.String()
-	t.CreatedAt = time.Now()
-	t.UpdatedAt = time.Now()
-	return *t
-}
-
-func (t *Timestamp) Create(db *gorm.DB) (*Timestamp, error) {
-	var err error
-	err = db.Debug().Create(&t).Error
-	if err != nil {
-		return &Timestamp{}, err
-	}
-	return t, nil
-}
-
-func (t *Timestamp) GetAllTimestamps(db *gorm.DB) (*[]Timestamp, error) {
-	var err error
-	var ts []Timestamp
-	err = db.Debug().Model(&Timestamp{}).Limit(100).Find(&ts).Error
-	return &ts, err
-}
-
-func (t *Timestamp) GetAllTimestampsByProject(db *gorm.DB, project string) (*[]Timestamp, error) {
-	var err error
-	var ts []Timestamp
-	err = db.Debug().Model(&Timestamp{}).Where("project = ?", project).Limit(100).Find(&ts).Error
-	return &ts, err
-}
-
-func (t *Timestamp) GetTimestampByID(db *gorm.DB, uuid string) (*Timestamp, error) {
-	err := db.Debug().Model(&Timestamp{}).Where("uuid = ?", uuid).Take(&t).Error
-	if err != nil {
-		return &Timestamp{}, err
-	}
-	if gorm.IsRecordNotFoundError(err) {
-		return &Timestamp{}, errors.New("timestamp not found")
-	}
-	return t, err
-}
-
-func (t *Timestamp) Delete(db *gorm.DB, uuid string) (int64, error) {
-	db = db.Debug().Model(&Timestamp{}).Where("uuid = ?", uuid).Take(&Timestamp{}).Delete(&Timestamp{})
-	if db.Error != nil {
-		return 0, db.Error
-	}
-	return db.RowsAffected, nil
-}
-
-func (t *Timestamp) Validate() error {
-	if t.Project == "" {
-		return errors.New("project is required")
-	}
-	return nil
 }

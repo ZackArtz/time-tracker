@@ -1,47 +1,34 @@
 package api
 
 import (
-	"fmt"
+	"context"
 	"log"
-	"os"
-	"os/user"
 
-	"github.com/gofiber/fiber"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"github.com/zackartz/ttd/models"
+	"github.com/gofiber/fiber/v2"
+	"github.com/zackartz/ttd/ent"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Server struct {
-	DB     *gorm.DB
+	client *ent.Client
 	Router *fiber.App
 }
 
 func (s *Server) Initialize() {
 	var err error
-
-	user, err := user.Current()
+	s.client, err = ent.Open("sqlite3", "file:dev?mode=memory&cache=shared&_fk=1")
 	if err != nil {
 		panic(err)
 	}
 
-	if _, err := os.Stat(fmt.Sprintf("%s/.local/share/tt", user.HomeDir)); os.IsNotExist(err) {
-		err := os.Mkdir(fmt.Sprintf("%s/.local/share/tt", user.HomeDir), 0700)
-		if err != nil {
-			log.Printf("Error creating directory %v", err)
-		} else {
-			log.Printf("Creating directory ~/.local/share/tt")
-		}
-	}
+	c = context.Background()
 
-	s.DB, err = gorm.Open("sqlite3", fmt.Sprintf("%s/.local/share/tt/data.db", user.HomeDir))
-	if err != nil {
-		log.Panicf("could not open database %v", err)
+	if err := s.client.Schema.Create(c); err != nil {
+		log.Fatalf("failed creating schema resources: %v", err)
 	}
-
-	s.DB.Debug().AutoMigrate(&models.Timestamp{})
 
 	s.initializeRoutes()
 
-	log.Fatal(s.Router.Listen(6969))
+	log.Fatal(s.Router.Listen(":6969"))
 }

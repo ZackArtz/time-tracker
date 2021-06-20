@@ -1,17 +1,17 @@
 package api
 
 import (
-	"github.com/gofiber/fiber"
-	"github.com/gofiber/fiber/middleware"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 func (s *Server) initializeRoutes() {
 	s.Router = fiber.New()
 
-	s.Router.Use(middleware.Logger())
+	s.Router.Use(logger.New())
 
-	s.Router.Get("/", func(ctx *fiber.Ctx) {
-		ctx.JSON(struct {
+	s.Router.Get("/", func(ctx *fiber.Ctx) error {
+		return ctx.JSON(struct {
 			Message string `json:"message"`
 		}{
 			Message: "the ttd daemon is working",
