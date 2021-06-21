@@ -22,7 +22,7 @@ type Timestamp struct {
 	// EndTime holds the value of the "end_time" field.
 	EndTime time.Time `json:"end_time,omitempty"`
 	// Active holds the value of the "active" field.
-	Active bool `json:"active,omitempty"`
+	Active bool `json:"active"`
 	// Comment holds the value of the "comment" field.
 	Comment string `json:"comment,omitempty"`
 	// Category holds the value of the "category" field.

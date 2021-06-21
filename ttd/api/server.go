@@ -17,7 +17,7 @@ type Server struct {
 
 func (s *Server) Initialize() {
 	var err error
-	s.client, err = ent.Open("sqlite3", "file:dev?mode=memory&cache=shared&_fk=1")
+	s.client, err = ent.Open("sqlite3", "file:dev.db?cache=shared&_fk=1")
 	if err != nil {
 		panic(err)
 	}

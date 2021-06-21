@@ -318,9 +318,22 @@ func (m *TimestampMutation) OldCategory(ctx context.Context) (v string, err erro
 	return oldValue.Category, nil
 }
 
+// ClearCategory clears the value of the "category" field.
+func (m *TimestampMutation) ClearCategory() {
+	m.category = nil
+	m.clearedFields[timestamp.FieldCategory] = struct{}{}
+}
+
+// CategoryCleared returns if the "category" field was cleared in this mutation.
+func (m *TimestampMutation) CategoryCleared() bool {
+	_, ok := m.clearedFields[timestamp.FieldCategory]
+	return ok
+}
+
 // ResetCategory resets all changes to the "category" field.
 func (m *TimestampMutation) ResetCategory() {
 	m.category = nil
+	delete(m.clearedFields, timestamp.FieldCategory)
 }
 
 // SetProject sets the "project" field.
@@ -354,22 +367,9 @@ func (m *TimestampMutation) OldProject(ctx context.Context) (v string, err error
 	return oldValue.Project, nil
 }
 
-// ClearProject clears the value of the "project" field.
-func (m *TimestampMutation) ClearProject() {
-	m.project = nil
-	m.clearedFields[timestamp.FieldProject] = struct{}{}
-}
-
-// ProjectCleared returns if the "project" field was cleared in this mutation.
-func (m *TimestampMutation) ProjectCleared() bool {
-	_, ok := m.clearedFields[timestamp.FieldProject]
-	return ok
-}
-
 // ResetProject resets all changes to the "project" field.
 func (m *TimestampMutation) ResetProject() {
 	m.project = nil
-	delete(m.clearedFields, timestamp.FieldProject)
 }
 
 // Op returns the operation name.
@@ -530,8 +530,8 @@ func (m *TimestampMutation) ClearedFields() []string {
 	if m.FieldCleared(timestamp.FieldComment) {
 		fields = append(fields, timestamp.FieldComment)
 	}
-	if m.FieldCleared(timestamp.FieldProject) {
-		fields = append(fields, timestamp.FieldProject)
+	if m.FieldCleared(timestamp.FieldCategory) {
+		fields = append(fields, timestamp.FieldCategory)
 	}
 	return fields
 }
@@ -550,8 +550,8 @@ func (m *TimestampMutation) ClearField(name string) error {
 	case timestamp.FieldComment:
 		m.ClearComment()
 		return nil
-	case timestamp.FieldProject:
-		m.ClearProject()
+	case timestamp.FieldCategory:
+		m.ClearCategory()
 		return nil
 	}
 	return fmt.Errorf("unknown Timestamp nullable field %s", name)

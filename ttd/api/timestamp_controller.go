@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -32,8 +31,8 @@ func (s *Server) CreateTimestamp(ctx *fiber.Ctx) error {
 		return utils.Error(ctx, http.StatusUnprocessableEntity, err)
 	}
 	timestamp, err := s.client.Timestamp.Create().
-		SetCategory(ts.Category).
-		SetNillableProject(&ts.Project).
+		SetNillableCategory(&ts.Category).
+		SetProject(ts.Project).
 		SetEndTime(time.Time{}).
 		SetNillableComment(&ts.Comment).
 		Save(c)
@@ -103,7 +102,7 @@ func (s *Server) DeleteTimestamp(ctx *fiber.Ctx) error {
 	if err != nil {
 		return utils.Error(ctx, http.StatusInternalServerError, err)
 	}
-	ctx.Set("Entity", fmt.Sprintf("%s", tid))
+	ctx.Set("Entity", tid)
 	return utils.JSON(ctx, http.StatusNoContent, ts)
 }
 

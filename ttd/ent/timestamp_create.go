@@ -75,17 +75,17 @@ func (tc *TimestampCreate) SetCategory(s string) *TimestampCreate {
 	return tc
 }
 
-// SetProject sets the "project" field.
-func (tc *TimestampCreate) SetProject(s string) *TimestampCreate {
-	tc.mutation.SetProject(s)
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (tc *TimestampCreate) SetNillableCategory(s *string) *TimestampCreate {
+	if s != nil {
+		tc.SetCategory(*s)
+	}
 	return tc
 }
 
-// SetNillableProject sets the "project" field if the given value is not nil.
-func (tc *TimestampCreate) SetNillableProject(s *string) *TimestampCreate {
-	if s != nil {
-		tc.SetProject(*s)
-	}
+// SetProject sets the "project" field.
+func (tc *TimestampCreate) SetProject(s string) *TimestampCreate {
+	tc.mutation.SetProject(s)
 	return tc
 }
 
@@ -172,8 +172,8 @@ func (tc *TimestampCreate) check() error {
 	if _, ok := tc.mutation.Active(); !ok {
 		return &ValidationError{Name: "active", err: errors.New("ent: missing required field \"active\"")}
 	}
-	if _, ok := tc.mutation.Category(); !ok {
-		return &ValidationError{Name: "category", err: errors.New("ent: missing required field \"category\"")}
+	if _, ok := tc.mutation.Project(); !ok {
+		return &ValidationError{Name: "project", err: errors.New("ent: missing required field \"project\"")}
 	}
 	return nil
 }

@@ -87,23 +87,23 @@ func (tu *TimestampUpdate) SetCategory(s string) *TimestampUpdate {
 	return tu
 }
 
-// SetProject sets the "project" field.
-func (tu *TimestampUpdate) SetProject(s string) *TimestampUpdate {
-	tu.mutation.SetProject(s)
-	return tu
-}
-
-// SetNillableProject sets the "project" field if the given value is not nil.
-func (tu *TimestampUpdate) SetNillableProject(s *string) *TimestampUpdate {
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (tu *TimestampUpdate) SetNillableCategory(s *string) *TimestampUpdate {
 	if s != nil {
-		tu.SetProject(*s)
+		tu.SetCategory(*s)
 	}
 	return tu
 }
 
-// ClearProject clears the value of the "project" field.
-func (tu *TimestampUpdate) ClearProject() *TimestampUpdate {
-	tu.mutation.ClearProject()
+// ClearCategory clears the value of the "category" field.
+func (tu *TimestampUpdate) ClearCategory() *TimestampUpdate {
+	tu.mutation.ClearCategory()
+	return tu
+}
+
+// SetProject sets the "project" field.
+func (tu *TimestampUpdate) SetProject(s string) *TimestampUpdate {
+	tu.mutation.SetProject(s)
 	return tu
 }
 
@@ -222,16 +222,16 @@ func (tu *TimestampUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: timestamp.FieldCategory,
 		})
 	}
+	if tu.mutation.CategoryCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: timestamp.FieldCategory,
+		})
+	}
 	if value, ok := tu.mutation.Project(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: timestamp.FieldProject,
-		})
-	}
-	if tu.mutation.ProjectCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
 			Column: timestamp.FieldProject,
 		})
 	}
@@ -314,23 +314,23 @@ func (tuo *TimestampUpdateOne) SetCategory(s string) *TimestampUpdateOne {
 	return tuo
 }
 
-// SetProject sets the "project" field.
-func (tuo *TimestampUpdateOne) SetProject(s string) *TimestampUpdateOne {
-	tuo.mutation.SetProject(s)
-	return tuo
-}
-
-// SetNillableProject sets the "project" field if the given value is not nil.
-func (tuo *TimestampUpdateOne) SetNillableProject(s *string) *TimestampUpdateOne {
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (tuo *TimestampUpdateOne) SetNillableCategory(s *string) *TimestampUpdateOne {
 	if s != nil {
-		tuo.SetProject(*s)
+		tuo.SetCategory(*s)
 	}
 	return tuo
 }
 
-// ClearProject clears the value of the "project" field.
-func (tuo *TimestampUpdateOne) ClearProject() *TimestampUpdateOne {
-	tuo.mutation.ClearProject()
+// ClearCategory clears the value of the "category" field.
+func (tuo *TimestampUpdateOne) ClearCategory() *TimestampUpdateOne {
+	tuo.mutation.ClearCategory()
+	return tuo
+}
+
+// SetProject sets the "project" field.
+func (tuo *TimestampUpdateOne) SetProject(s string) *TimestampUpdateOne {
+	tuo.mutation.SetProject(s)
 	return tuo
 }
 
@@ -473,16 +473,16 @@ func (tuo *TimestampUpdateOne) sqlSave(ctx context.Context) (_node *Timestamp, e
 			Column: timestamp.FieldCategory,
 		})
 	}
+	if tuo.mutation.CategoryCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: timestamp.FieldCategory,
+		})
+	}
 	if value, ok := tuo.mutation.Project(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: timestamp.FieldProject,
-		})
-	}
-	if tuo.mutation.ProjectCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
 			Column: timestamp.FieldProject,
 		})
 	}

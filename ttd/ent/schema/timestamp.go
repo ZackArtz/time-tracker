@@ -22,12 +22,13 @@ func (Timestamp) Fields() []ent.Field {
 			Default(time.Now),
 		field.Time("end_time"),
 		field.Bool("active").
-			Default(true),
+			Default(true).
+			StructTag(`json:"active"`),
 		field.String("comment").
 			Optional(),
-		field.String("category"),
-		field.String("project").
+		field.String("category").
 			Optional(),
+		field.String("project"),
 	}
 }
 

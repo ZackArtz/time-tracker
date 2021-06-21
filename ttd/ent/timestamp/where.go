@@ -523,6 +523,20 @@ func CategoryHasSuffix(v string) predicate.Timestamp {
 	})
 }
 
+// CategoryIsNil applies the IsNil predicate on the "category" field.
+func CategoryIsNil() predicate.Timestamp {
+	return predicate.Timestamp(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldCategory)))
+	})
+}
+
+// CategoryNotNil applies the NotNil predicate on the "category" field.
+func CategoryNotNil() predicate.Timestamp {
+	return predicate.Timestamp(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldCategory)))
+	})
+}
+
 // CategoryEqualFold applies the EqualFold predicate on the "category" field.
 func CategoryEqualFold(v string) predicate.Timestamp {
 	return predicate.Timestamp(func(s *sql.Selector) {
@@ -631,20 +645,6 @@ func ProjectHasPrefix(v string) predicate.Timestamp {
 func ProjectHasSuffix(v string) predicate.Timestamp {
 	return predicate.Timestamp(func(s *sql.Selector) {
 		s.Where(sql.HasSuffix(s.C(FieldProject), v))
-	})
-}
-
-// ProjectIsNil applies the IsNil predicate on the "project" field.
-func ProjectIsNil() predicate.Timestamp {
-	return predicate.Timestamp(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldProject)))
-	})
-}
-
-// ProjectNotNil applies the NotNil predicate on the "project" field.
-func ProjectNotNil() predicate.Timestamp {
-	return predicate.Timestamp(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldProject)))
 	})
 }
 

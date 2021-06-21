@@ -15,8 +15,8 @@ var (
 		{Name: "end_time", Type: field.TypeTime},
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "comment", Type: field.TypeString, Nullable: true},
-		{Name: "category", Type: field.TypeString},
-		{Name: "project", Type: field.TypeString, Nullable: true},
+		{Name: "category", Type: field.TypeString, Nullable: true},
+		{Name: "project", Type: field.TypeString},
 	}
 	// TimestampsTable holds the schema information for the "timestamps" table.
 	TimestampsTable = &schema.Table{

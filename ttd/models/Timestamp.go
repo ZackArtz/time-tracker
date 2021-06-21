@@ -1,6 +1,4 @@
-
-/*
-Copyright © 2020 Zachary Myers <zackmyers@lavabit.com>
+/*Copyright © 2020 Zachary Myers <zackmyers@lavabit.com>
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -22,5 +20,6 @@ type Timestamp struct {
 	EndTime   time.Time `json:"end_time,omitempty"`
 	Comment   string    `json:"comment"`
 	Project   string    `json:"project"`
+	Active    bool      `json:"active"`
 	Category  string    `json:"category"`
 }
