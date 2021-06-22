@@ -5,22 +5,28 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/zackartz/ttd/ent"
+	"github.com/zackartz/ttd/prisma/db"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 type Server struct {
-	client *ent.Client
+	client *db.PrismaClient
 	Router *fiber.App
 }
 
 func (s *Server) Initialize() {
-	var err error
-	s.client, err = ent.Open("sqlite3", "file:dev.db?cache=shared&_fk=1")
-	if err != nil {
-		panic(err)
+	s.client = db.NewClient()
+	if err := s.client.Prisma.Connect(); err != nil {
+		log.Panicln(err)
+		return
 	}
+
+	defer func() {
+		if err := s.client.Prisma.Disconnect(); err != nil {
+			panic(err)
+		}
+	}()
 
 	c = context.Background()
 

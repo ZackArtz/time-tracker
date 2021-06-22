@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:dev.db"
+}
+
+generator client {
+  provider = "go run github.com/prisma/prisma-client-go"
+}
+
+model Timestamp {
+  id        String   @id @default(uuid())
+  project   String
+  category  String?
+  comment   String?
+  active    Boolean  @default(true)
+  startTime DateTime @default(now())
+  endTime   DateTime
+  pauses    Pause[]
+}
+
+model Pause {
+  id           String    @id @default(uuid())
+  timestamp    Timestamp @relation(fields: [timestamp_id], references: [id])
+  timestamp_id String
+  startTime    DateTime  @default(now())
+  endTime      DateTime
+}
