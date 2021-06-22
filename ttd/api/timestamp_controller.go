@@ -81,7 +81,14 @@ func (s *Server) EndTimestampByUUID(ctx *fiber.Ctx) error {
 	if err != nil {
 		return utils.Error(ctx, http.StatusBadRequest, err)
 	}
-	ts, err := s.client.Timestamp.Update().
+	ts, err := s.client.Timestamp.Get(c, uid)
+	if err != nil {
+		return utils.Error(ctx, http.StatusBadRequest, err)
+	}
+	if !ts.Active {
+		return utils.Error(ctx, http.StatusBadRequest, errors.New("timestamp has already ended"))
+	}
+	_, err = s.client.Timestamp.Update().
 		Where(timestamp.ID(uid)).
 		SetEndTime(time.Now()).
 		SetActive(false).
